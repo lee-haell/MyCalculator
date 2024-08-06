@@ -1,6 +1,7 @@
 package com.example.mycalculator
 
 import android.os.Bundle
+import android.view.View
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -22,11 +23,18 @@ class MainActivity : AppCompatActivity() {
         //setContentView()는 레이아웃을 inflating 해주는 역할. 기존에는 아래와 같이 R.layout.activity_main으로 넘겨줬다면, viewBinding에서는 root뷰를 넘겨줌
         //setContentView(R.layout.activity_main)
 
+        binding.allDelete.setOnClickListener {binding.numInput.text = ""}
+        //AC 버튼 클릭 시 수행할 작업
+        binding.numSeven.setOnClickListener {binding.numInput.text = "7"}
+
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
-
     }
+
+//    fun allDataDelected() {
+//        val allData = binding.allDelete.text.toString()
+//    }
 }
