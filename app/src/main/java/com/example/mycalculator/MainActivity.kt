@@ -47,7 +47,7 @@ class MainActivity : AppCompatActivity() {
         binding.allClear.setOnClickListener { allClearClick() } //AC 버튼 클릭 시 호출
         binding.clear.setOnClickListener { clearClick() } //입력값의 모든 값 삭제
         binding.backClear.setOnClickListener { backClearClick(0) } //입력값의 값 하나씩 삭제
-        binding.division.setOnClickListener {  } //연산 나누기
+        binding.division.setOnClickListener { divisionClick() } //연산 나누기
         binding.multiply.setOnClickListener {  } //연산 곱하기
         binding.minus.setOnClickListener {  } //연산 빼기
         binding.plus.setOnClickListener {  } //연산 더하기
@@ -85,6 +85,13 @@ class MainActivity : AppCompatActivity() {
         if(backResult != null) { //만약에, 결과값 문자열이 빈 값이 아니면
             backResult.substring(backResult.length - n)
         }
+    }
+
+    //나눗셈 버튼 클릭 시 호출되는 메서드
+    private fun divisionClick(FirstNum: Int, SecondNum: Int): Int {
+        numInput?.text = "/"
+        val divisionResult = FirstNum.toDouble() / SecondNum
+//        return numResult?.text = divisionResult
     }
 
     //숫자 버튼 클릭 시 호출되는 메서드
