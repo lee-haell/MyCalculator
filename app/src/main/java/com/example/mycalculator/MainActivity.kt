@@ -32,40 +32,68 @@ class MainActivity : AppCompatActivity() {
         //setContentView(R.layout.activity_main)
 
         //숫자 버튼 클릭 이벤트 리스너
-        binding.numSeven.setOnClickListener {  }
-        binding.numEight.setOnClickListener {  }
-        binding.numNine.setOnClickListener {  }
-        binding.numFore.setOnClickListener {  }
-        binding.numFive.setOnClickListener {  }
-        binding.numSix.setOnClickListener {  }
-        binding.numOne.setOnClickListener {  }
-        binding.numTwo.setOnClickListener {  }
-        binding.numThree.setOnClickListener {  }
-        binding.numZero.setOnClickListener {  }
+        binding.numOne.setOnClickListener { appendNumber("1") }
+        binding.numTwo.setOnClickListener { appendNumber("2") }
+        binding.numThree.setOnClickListener { appendNumber("3") }
+        binding.numFore.setOnClickListener { appendNumber("4") }
+        binding.numFive.setOnClickListener { appendNumber("5") }
+        binding.numSix.setOnClickListener { appendNumber("6") }
+        binding.numSeven.setOnClickListener { appendNumber("7") }
+        binding.numEight.setOnClickListener { appendNumber("8") }
+        binding.numNine.setOnClickListener { appendNumber("9") }
+        binding.numZero.setOnClickListener { appendNumber("0") }
 
         //연산 버튼 클릭 이벤트 리스너
-        binding.allDelete.setOnClickListener { //AC 버튼 클릭 시 호출
-            numInput?.text = ""
-            numResult?.text = ""
-            numInputCheck = false
-            numResultCheck = false
-            FirstNum = 0.0
-            SecondNum = 0.0
-            Arithmethic = ""
-        }
-        binding.delete.setOnClickListener {  }
-        binding.oneDelete.setOnClickListener {  }
-        binding.division.setOnClickListener {  }
-        binding.multiply.setOnClickListener {  }
-        binding.subtract.setOnClickListener {  }
-        binding.plus.setOnClickListener {  }
-        binding.dot.setOnClickListener {  }
-        binding.equal.setOnClickListener {  }
+        binding.allClear.setOnClickListener { allClearClick() } //AC 버튼 클릭 시 호출
+        binding.clear.setOnClickListener { clearClick() } //입력값의 모든 값 삭제
+        binding.backClear.setOnClickListener { backClearClick(0) } //입력값의 값 하나씩 삭제
+        binding.division.setOnClickListener {  } //연산 나누기
+        binding.multiply.setOnClickListener {  } //연산 곱하기
+        binding.minus.setOnClickListener {  } //연산 빼기
+        binding.plus.setOnClickListener {  } //연산 더하기
+        binding.dot.setOnClickListener {  } //소수점
+        binding.equal.setOnClickListener {  } //등호
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
+        }
+    }
+
+    //AC 버튼 클릭 시 호출되는 메서드
+    private fun allClearClick() {
+        numInput?.text = "" //입력값 텍스트 비움
+        numResult?.text = "" //결과값 텍스트 비움
+        numInputCheck = false //입력값이 설정되지 않았음을 표시하는 플래그를 false로 설정
+        numResultCheck = false //결과값이 설정되지 않았음을 표시하는 플래그를 false로 설정
+        FirstNum = 0.0 //첫 번째 숫자 초기화
+        SecondNum = 0.0 //두 번째 숫자 초기화
+        Arithmethic = "" //연산자 초기화
+    }
+
+    //C 버튼 클릭 시 호출되는 메서드
+    private fun clearClick() {
+        numInput?.text = ""
+        numInputCheck = false
+        SecondNum = 0.0
+    }
+
+    //x 버튼 클릭 시 호출되는 메서드
+    private fun backClearClick(n: Int) {
+        var backResult = numResult?.text.toString() //결과값의 텍스트를 문자열로 가져오기
+        if(backResult != null) { //만약에, 결과값 문자열이 빈 값이 아니면
+            backResult.substring(backResult.length - n)
+        }
+    }
+
+    //숫자 버튼 클릭 시 호출되는 메서드
+    private fun appendNumber(number: String) {
+        if(numInputCheck){ //입력값이 설정되어 있다면
+            numInput?.append(number) //현재 입력값에 숫자를 추가
+        } else { //입력값이 설정되어 있지 않다면
+            numInput?.text = number //입력값을 숫자로 설정
+            numInputCheck = true //입력값이 설정되지 않았음을 표시하는 플래그를 true로 설정
         }
     }
 }
