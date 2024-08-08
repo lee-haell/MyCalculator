@@ -52,7 +52,7 @@ class MainActivity : AppCompatActivity() {
         binding.minus.setOnClickListener { operatorClick("-") } //연산 빼기
         binding.plus.setOnClickListener { operatorClick("+") } //연산 더하기
         binding.dot.setOnClickListener { appendNumber(".") } //소수점
-        binding.equal.setOnClickListener { caculateResult() } //등호
+        binding.equal.setOnClickListener { calculateResult() } //등호
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
@@ -61,13 +61,25 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    //숫자 버튼 클릭 시 호출 되는 메서드
+    /**
+     * 숫자 버튼 클릭 시 호출 되는 메서드
+     * 연산자 설정 여부로 첫 번째 or 두 번째 숫자로 인식
+     */
     private fun appendNumber(number: String) {
-        if(numInputCheck){ //입력값이 설정되어 있다면
-            numInput?.append(number) //현재 입력값에 숫자를 추가
-        } else { //입력값이 설정 되어 있지 않다면
-            numInput?.text = number //입력값을 숫자로 설정
-            numInputCheck = true //입력값이 설정 되지 않았음을 표시 하는 플래그를 true로 설정
+        if(Arithmethic == null) { //연산자가 설정 안 됐을 때
+            if(numResultCheck) {
+                numResult?.append(number)
+            } else {
+                numResult?.text = number
+                numResultCheck = true
+            }
+        } else { //연산자가 설정 됐을 때
+            if(numInputCheck) {
+                numResult?.append(number)
+            } else {
+                numResult?.text = number
+                numResultCheck = true
+            }
         }
     }
 
@@ -90,46 +102,30 @@ class MainActivity : AppCompatActivity() {
     }
 
     //마지막 문자 삭제 버튼('x') 클릭 시 호출 되는 메서드
+    //------마지막 문자가 연산자 일 때는?-------
     private fun backClearClick() {
         if(numInput?.text.toString().isNotEmpty()) {
             numInput?.text = numInput?.text?.dropLast(1)
         }
     }
 
-    /**
-     * 연산자 버튼 클릭 시 호출 되는 메서드(2가지 경우의 수)
-     * 1. 처음 입력한 숫자 다음 연산자 버튼 클릭 시
-     *      a. 입력값 가져 와서 FirstNum 변수에 저장
-     *      b. 연산자 변수에 해당 연산자 저장
-     *      c. 새로운 값 받기(입력값 초기화)
-     * 2. 1차로 연산을 한 후에 나온 값 다음에 연산자 버튼 클릭 시
-     *      a. 결과값 가져 와서 FirstNum 변수에 저장
-     *      b. 연산자 변수에 해당 연산자 저장'
-     *      c. 새로운 값 받기(입력값 초기화)
-     */
     private fun operatorClick(operator: String) {
-        if(numInputCheck) {
-            FirstNum = numInput?.text.toString().toDouble()
-            Arithmethic = operator
-            numInput?.text = ""
-            numInputCheck = false
-        } else if(numResultCheck) {
+        if(numResultCheck) {
             FirstNum = numResult?.text.toString().toDouble()
             Arithmethic = operator
-            numResult?.text = ""
+            numResult?.text = FirstNum.toString()
+            numInput?.text = FirstNum.toString() + Arithmethic
             numResultCheck = false
+        } else if(numInputCheck) {
+            FirstNum = numInput?.text.toString().toDouble()
+            Arithmethic = operator
+            numInput?.text = FirstNum.toString() + Arithmethic
+            numResult?.text = ""
+            numInputCheck = true
         }
     }
 
-    /**
-     * =(등호) 버튼 클릭 시 호출 되는 메서드
-     *  1. 만약에 입력값 설정 되었다면
-     *  2. 두 번째 입력 숫자 변수에 입력값 문자열을 십진수로 변환한 값 저장
-     *  3. 각 연산자에 맞게 최종 결과값 변수에 첫 번째 & 두 번째 숫자 연산
-     *  4. 최종 결과값 텍스트에 최종 결과 변수의 문자열 저장
-     *  5. 처음 입력값 초기화
-     */
-    private fun caculateResult() {
+    private fun calculateResult() {
         if(numInputCheck) {
             SecondNum = numInput?.text.toString().toDouble()
             when(Arithmethic) {
